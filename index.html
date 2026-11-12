@@ -6,8 +6,8 @@
 <title>مزرعة خوخة 🌸</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
-  * { margin:0; padding:0; box-sizing:border-box; user-select: none; -webkit-user-select: none; }
-  body { font-family:'Segoe UI', Tahoma, Arial, sans-serif; overflow:hidden; background:#aee3ff; touch-action: none; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Segoe UI', Tahoma, Arial, sans-serif; overflow:hidden; background:#aee3ff; }
   #game { position:fixed; inset:0; }
   canvas { display:block; }
 
@@ -17,7 +17,7 @@
     align-items:center; justify-content:center; text-align:center;
     background:linear-gradient(135deg,#ffb6d5 0%,#ffd9a0 40%,#b6f0c1 100%);
     transition:opacity 1.2s ease;
-    padding: 15px;
+    padding: 10px;
     overflow-y: auto;
   }
   #welcome.hidden { opacity:0; pointer-events:none; }
@@ -49,59 +49,20 @@
 
   /* ======= عدّادات ======= */
   #stats {
-    position:fixed; top:10px; left:10px; z-index:20; display:flex; gap:6px; flex-wrap: wrap;
+    position:fixed; top:10px; left:10px; z-index:20; display:flex; gap:6px;
   }
   .stat { background:rgba(255,255,255,.92); border-radius:12px; padding:6px 10px; font-size:13px; font-weight:bold; color:#5a3b52; border:2px solid #ffd3e6; }
 
   /* ======= مربع الحوار ======= */
   #dialog {
-    position:fixed; bottom:140px; left:50%; transform:translateX(-50%); z-index:20;
+    position:fixed; bottom:15px; left:50%; transform:translateX(-50%); z-index:20;
     background:rgba(255,255,255,.95); border-radius:18px; padding:10px 16px; max-width:450px; width: 90%;
     border:2px solid #ffb35c; display:none; align-items:center; gap:10px; font-size:14px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
   }
   #dialog.show { display:flex; }
   #dialogApple { font-size:28px; }
   #dialogName { color:#e07b00; font-weight:bold; }
   #dialogText { color:#5a3b52; }
-
-  /* ======= أزرار التحكم باللمس (الأنالوج وزر اليد) ======= */
-  #touch-controls {
-    position:fixed; bottom:20px; left:0; right:0; z-index:40;
-    display:flex; justify-content:space-between; align-items:flex-end;
-    padding:0 30px; pointer-events:none;
-  }
-  #joystick-zone {
-    width: 120px; height: 120px;
-    background: rgba(255, 255, 255, 0.25);
-    border: 3px solid rgba(255, 255, 255, 0.6);border-radius: 50%;
-    position: relative;
-    pointer-events: auto;
-    touch-action: none;backdrop-filter: blur(4px);}
-  #joystick-knob {
-    width: 50px; height: 50px;
-    background: rgba(255, 182, 193, 0.9);
-    border: 2px solid #fff;
-    border-radius: 50%;
-    position: absolute;
-    top: 32px; left: 32px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  }
-  #action-btn {
-    width: 75px; height: 75px;
-    background: rgba(255, 105, 180, 0.85);
-    border: 3px solid #fff;
-    border-radius: 50%;
-    color: white; font-size: 32px;
-    display: flex; justify-content: center; align-items: center;
-    pointer-events: auto; touch-action: none;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-    cursor: pointer;
-  }
-  #action-btn:active {
-    transform: scale(0.92);
-    background: rgba(255, 20, 147, 0.95);
-  }
 
   #ending {
     position:fixed; inset:0; z-index:60; display:none; flex-direction:column;
@@ -120,10 +81,9 @@
   <h1>🌸 مزرعة خوخة 🌸</h1>
   <h2>مغامرة الزراعة والهدوء مع نبأي وتفاحة</h2>
   <div class="card">
-    <p>أهلًا بك يا صديقي في أجمل مزرعة في العالم! 💕<br>
-    ازرع، اسقِ، احصد، وابحث عن الكنوز والدمى المخبأة…<br>
+    <p>أهلًا بك يا صديقي في أجمل مزرعة في العالم! 💕<br>ازرع، اسقِ، احصد، وابحث عن الكنوز والدمى المخبأة…<br>
     وفي نهاية الرحلة ينتظرك سر جميل: <b>قلادة القلب المخبأ فيها سيف</b> 💖⚔️</p>
-    <div class="keys">🎮 التحكم: استخدم الأنالوج باليسار للحركة &nbsp;|&nbsp; زر ✋ للتفاعل</div>
+    <div class="keys">🎮 التحكم: الأسهم أو WASD للحركة &nbsp;|&nbsp; حرف E للتفاعل</div>
     <button id="startBtn">ابدأ الرحلة 🌱</button>
   </div>
 </div>
@@ -142,15 +102,7 @@
 
 <div id="dialog">
   <div id="dialogApple">🍎</div>
-  <div><div id="dialogName">تفاحة</div><div id="dialogText">أهلاً بك يا نبأي! اقتربي من الحقول واضغطي زر ✋ لزراعة المحصول الأول! 🌱</div></div>
-</div>
-
-<!-- عناصر التحكم باللمس -->
-<div id="touch-controls">
-  <div id="joystick-zone">
-    <div id="joystick-knob"></div>
-  </div>
-  <div id="action-btn" title="تفاعل">✋</div>
+  <div><div id="dialogName">تفاحة</div><div id="dialogText">أهلاً بك يا نبأي! اقتربي من الحقول واضغطي E لزراعة المحصول الأول! 🌱</div></div>
 </div>
 
 <div id="ending">
@@ -184,67 +136,14 @@ ground.rotation.x = -Math.PI/2;
 ground.receiveShadow = true;
 scene.add(ground);
 
-// ======= شخصية نبأي المطورة (جسم لطيف، فستان، ذراعان، رأس جميل) =======
+// شخصية نبأي
 const nabai = new THREE.Group();
-
-// الفستان / الجسم
-const dressMat = new THREE.MeshStandardMaterial({color:0xff8fb7, roughness:0.3});
-const dress = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.65, 1.0, 24), dressMat);
-dress.position.y = 0.85; dress.castShadow = true;
-nabai.add(dress);// الرأس
-const headMat = new THREE.MeshStandardMaterial({color:0xffdfc4, roughness:0.4});const head = new THREE.Mesh(new THREE.SphereGeometry(0.38, 24, 24), headMat);
-head.position.y = 1.65; head.castShadow = true;
-nabai.add(head);// الشعر والقوس
-const hairMat = new THREE.MeshStandardMaterial({color:0x5a3b2e});
-const bun = new THREE.Mesh(new THREE.SphereGeometry(0.22, 16, 16), hairMat);
-bun.position.set(0, 1.95, -0.05);
-nabai.add(bun);
-
-const bowMat = new THREE.MeshStandardMaterial({color:0xff4d88});
-const bow = new THREE.Mesh(new THREE.BoxGeometry(0.25, 0.12, 0.1), bowMat);
-bow.position.set(0, 2.05, 0.1);
-nabai.add(bow);
-
-// الذراعان
-const handMat = new THREE.MeshStandardMaterial({color:0xffdfc4});
-const leftArm = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 0.45, 12), handMat);
-leftArm.rotation.z = -Math.PI / 6;
-leftArm.position.set(-0.38, 1.1, 0);
-nabai.add(leftArm);
-
-const rightArm = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 0.45, 12), handMat);
-rightArm.rotation.z = Math.PI / 6;
-rightArm.position.set(0.38, 1.1, 0);
-nabai.add(rightArm);
-
-// الحذاء
-const shoeMat = new THREE.MeshStandardMaterial({color:0xff6699});
-const leftFoot = new THREE.Mesh(new THREE.SphereGeometry(0.12, 12, 12), shoeMat);
-leftFoot.position.set(-0.2, 0.15, 0);
-nabai.add(leftFoot);
-
-const rightFoot = new THREE.Mesh(new THREE.SphereGeometry(0.12, 12, 12), shoeMat);
-rightFoot.position.set(0.2, 0.15, 0);
-nabai.add(rightFoot);
-
+const body = new THREE.Mesh(new THREE.ConeGeometry(0.55, 1.1, 24), new THREE.MeshStandardMaterial({color:0xff8fb7}));
+body.position.y = 0.95; nabai.add(body);
+const head = new THREE.Mesh(new THREE.SphereGeometry(0.42, 24, 20), new THREE.MeshStandardMaterial({color:0xffdfc4}));
+head.position.y = 1.85; nabai.add(head);
 nabai.position.set(0, 0, 12);
 scene.add(nabai);
-
-// حركة الشخصية
-const keys = { w:false, a:false, s:false, d:false };
-window.addEventListener('keydown', e => {
-  if(['KeyW','ArrowUp'].includes(e.code)) keys.w = true;
-  if(['KeyS','ArrowDown'].includes(e.code)) keys.s = true;
-  if(['KeyA','ArrowLeft'].includes(e.code)) keys.a = true;
-  if(['KeyD','ArrowRight'].includes(e.code)) keys.d = true;
-  if(e.code === 'KeyE') triggerInteraction();
-});
-window.addEventListener('keyup', e => {
-  if(['KeyW','ArrowUp'].includes(e.code)) keys.w = false;
-  if(['KeyS','ArrowDown'].includes(e.code)) keys.s = false;
-  if(['KeyA','ArrowLeft'].includes(e.code)) keys.a = false;
-  if(['KeyD','ArrowRight'].includes(e.code)) keys.d = false;
-});
 
 // الحقول والكنوز
 const plots = [];
@@ -284,87 +183,12 @@ function updateTasksUI(){
   if (currentTaskIdx >= tasks.length) document.getElementById('ending').classList.add('show');
 }
 
-document.getElementById('startBtn').addEventListener('click', () => {document.getElementById('welcome').classList.add('hidden');
+document.getElementById('startBtn').addEventListener('click', () => {
+  document.getElementById('welcome').classList.add('hidden');
   gameStarted = true;
   updateTasksUI();
-});// تفاعل زر اليد ✋
-function triggerInteraction(){
-  if(!gameStarted) return;
-  // تفاعل بسيط كمثال مع أول حقل فارغ أو زيادة المحصول للتجربة
-  if(statsData.harvest < 6) {
-    statsData.harvest++;
-    updateTasksUI();
-    showDialog("تفاحة", "رائع يا نبأي! نمت النبتة وأصبحت جميلة جداً! 🌾✨");
-  }
-}document.getElementById('action-btn').addEventListener('touchstart', (e) => {
-  e.preventDefault();
-  triggerInteraction();
-});
-document.getElementById('action-btn').addEventListener('click', () => {
-  triggerInteraction();
-});
-
-function showDialog(name, text){
-  document.getElementById('dialogName').innerText = name;
-  document.getElementById('dialogText').innerText = text;
-  document.getElementById('dialog').classList.add('show');
-  setTimeout(() => {
-    document.getElementById('dialog').classList.remove('show');
-  }, 3500);
-}
-
-// التحكم بالأنالوج الدائري باللمس
-const zone = document.getElementById('joystick-zone');
-const knob = document.getElementById('joystick-knob');
-let isDragging = false;
-let moveDir = { x: 0, z: 0 };
-const maxDist = 35;
-
-function handleJoystick(clientX, clientY) {
-  const rect = zone.getBoundingClientRect();
-  const centerX = rect.left + rect.width / 2;
-  const centerY = rect.top + rect.height / 2;
-  
-  let dx = clientX - centerX;
-  let dy = clientY - centerY;
-  const dist = Math.hypot(dx, dy);
-
-  if (dist > maxDist) {
-    dx = (dx / dist) * maxDist;
-    dy = (dy / dist) * maxDist;
-  }
-
-  knob.style.transform = translate(${dx}px, ${dy}px);
-  moveDir.x = dx / maxDist;
-  moveDir.z = dy / maxDist;
-}
-
-function resetJoystick() {
-  isDragging = false;
-  knob.style.transform = translate(0px, 0px);
-  moveDir.x = 0;
-  moveDir.z = 0;
-}
-
-zone.addEventListener('touchstart', (e) => {
-  e.preventDefault();
-  isDragging = true;
-  handleJoystick(e.touches[0].clientX, e.touches[0].clientY);
-}, { passive: false });
-
-zone.addEventListener('touchmove', (e) => {
-  e.preventDefault();
-  if (isDragging) {
-    handleJoystick(e.touches[0].clientX, e.touches[0].clientY);
-  }
-}, { passive: false });
-
-zone.addEventListener('touchend', resetJoystick);
-zone.addEventListener('touchcancel', resetJoystick);
-
-let camAngle = 0;
+});let camAngle = 0;
 let clock = new THREE.Clock();
-
 function animate() {
   requestAnimationFrame(animate);
   const dt = clock.getDelta();
@@ -376,23 +200,6 @@ function animate() {
     camera.position.y = 12;
     camera.lookAt(0, 1, 0);
   } else {
-    // حركة الشخصية بواسطة WASD أو الأنالوج
-    let speed = 6 * dt;
-    let dx = 0, dz = 0;
-
-    if (keys.w || moveDir.z < -0.2) dz -= speed;
-    if (keys.s || moveDir.z > 0.2) dz += speed;
-    if (keys.a || moveDir.x < -0.2) dx -= speed;
-    if (keys.d || moveDir.x > 0.2) dx += speed;
-
-    nabai.position.x += dx;
-    nabai.position.z += dz;
-
-    // تدوير الشخصية باتجاه الحركة
-    if (dx !== 0 || dz !== 0) {
-      nabai.rotation.y = Math.atan2(dx, dz);
-    }
-
     camera.position.x = nabai.position.x + Math.sin(camAngle) * 12;
     camera.position.z = nabai.position.z + Math.cos(camAngle) * 12;
     camera.position.y = 8;
