@@ -74,12 +74,10 @@
   #joystick-zone {
     width: 120px; height: 120px;
     background: rgba(255, 255, 255, 0.25);
-    border: 3px solid rgba(255, 255, 255, 0.6);
-    border-radius: 50%;
+    border: 3px solid rgba(255, 255, 255, 0.6);border-radius: 50%;
     position: relative;
     pointer-events: auto;
-    touch-action: none;backdrop-filter: blur(4px);
-  }
+    touch-action: none;backdrop-filter: blur(4px);}
   #joystick-knob {
     width: 50px; height: 50px;
     background: rgba(255, 182, 193, 0.9);
@@ -186,18 +184,18 @@ ground.rotation.x = -Math.PI/2;
 ground.receiveShadow = true;
 scene.add(ground);
 
-// ======= شخصية نبأي المطورة =======
+// ======= شخصية نبأي المطورة (جسم لطيف، فستان، ذراعان، رأس جميل) =======
 const nabai = new THREE.Group();
 
+// الفستان / الجسم
 const dressMat = new THREE.MeshStandardMaterial({color:0xff8fb7, roughness:0.3});
 const dress = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.65, 1.0, 24), dressMat);
 dress.position.y = 0.85; dress.castShadow = true;
-nabai.add(dress);
-
-const headMat = new THREE.MeshStandardMaterial({color:0xffdfc4, roughness:0.4});
-const head = new THREE.Mesh(new THREE.SphereGeometry(0.38, 24, 24), headMat);
+nabai.add(dress);// الرأس
+const headMat = new THREE.MeshStandardMaterial({color:0xffdfc4, roughness:0.4});const head = new THREE.Mesh(new THREE.SphereGeometry(0.38, 24, 24), headMat);
 head.position.y = 1.65; head.castShadow = true;
-nabai.add(head);const hairMat = new THREE.MeshStandardMaterial({color:0x5a3b2e});
+nabai.add(head);// الشعر والقوس
+const hairMat = new THREE.MeshStandardMaterial({color:0x5a3b2e});
 const bun = new THREE.Mesh(new THREE.SphereGeometry(0.22, 16, 16), hairMat);
 bun.position.set(0, 1.95, -0.05);
 nabai.add(bun);
@@ -207,6 +205,7 @@ const bow = new THREE.Mesh(new THREE.BoxGeometry(0.25, 0.12, 0.1), bowMat);
 bow.position.set(0, 2.05, 0.1);
 nabai.add(bow);
 
+// الذراعان
 const handMat = new THREE.MeshStandardMaterial({color:0xffdfc4});
 const leftArm = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 0.45, 12), handMat);
 leftArm.rotation.z = -Math.PI / 6;
@@ -218,6 +217,7 @@ rightArm.rotation.z = Math.PI / 6;
 rightArm.position.set(0.38, 1.1, 0);
 nabai.add(rightArm);
 
+// الحذاء
 const shoeMat = new THREE.MeshStandardMaterial({color:0xff6699});
 const leftFoot = new THREE.Mesh(new THREE.SphereGeometry(0.12, 12, 12), shoeMat);
 leftFoot.position.set(-0.2, 0.15, 0);
@@ -246,7 +246,7 @@ window.addEventListener('keyup', e => {
   if(['KeyD','ArrowRight'].includes(e.code)) keys.d = false;
 });
 
-// الحقول
+// الحقول والكنوز
 const plots = [];
 for(let i=0; i<6; i++){
   const col = i % 3, row = Math.floor(i/3);
@@ -273,8 +273,9 @@ function updateTasksUI(){
   list.innerHTML = '';
   tasks.forEach((t, i) => {
     const done = t.check();
-    if (i === currentTaskIdx && done) currentTaskIdx++;
-    list.innerHTML += '<div class="task ' + (done ? 'done' : '') + '"><div class="chk">' + (done ? '✓' : '') + '</div><span>' + t.text + '</span></div>';
+    const active = i === currentTaskIdx && !done;
+    if (active && currentTaskIdx < tasks.length && done) currentTaskIdx++;
+    list.innerHTML += <div class="task ${done?'done':''}"><div class="chk">${done?'✓':''}</div><span>${t.text}</span></div>;
   });
   document.getElementById('sHarvest').innerText = statsData.harvest;
   document.getElementById('sTreasure').innerText = statsData.treasure;
@@ -283,29 +284,27 @@ function updateTasksUI(){
   if (currentTaskIdx >= tasks.length) document.getElementById('ending').classList.add('show');
 }
 
-document.getElementById('startBtn').addEventListener('click', () => {
-  document.getElementById('welcome').classList.add('hidden');
+document.getElementById('startBtn').addEventListener('click', () => {document.getElementById('welcome').classList.add('hidden');
   gameStarted = true;
   updateTasksUI();
-});
-
-// تفاعل زر اليد ✋
+});// تفاعل زر اليد ✋
 function triggerInteraction(){
   if(!gameStarted) return;
+  // تفاعل بسيط كمثال مع أول حقل فارغ أو زيادة المحصول للتجربة
   if(statsData.harvest < 6) {
     statsData.harvest++;
     updateTasksUI();
     showDialog("تفاحة", "رائع يا نبأي! نمت النبتة وأصبحت جميلة جداً! 🌾✨");
   }
-}
-
-document.getElementById('action-btn').addEventListener('touchstart', (e) => {
+}document.getElementById('action-btn').addEventListener('touchstart', (e) => {
   e.preventDefault();
   triggerInteraction();
 });
 document.getElementById('action-btn').addEventListener('click', () => {
   triggerInteraction();
-});function showDialog(name, text){
+});
+
+function showDialog(name, text){
   document.getElementById('dialogName').innerText = name;
   document.getElementById('dialogText').innerText = text;
   document.getElementById('dialog').classList.add('show');
@@ -335,14 +334,14 @@ function handleJoystick(clientX, clientY) {
     dy = (dy / dist) * maxDist;
   }
 
-  knob.style.transform = 'translate(' + dx + 'px, ' + dy + 'px)';
+  knob.style.transform = translate(${dx}px, ${dy}px);
   moveDir.x = dx / maxDist;
   moveDir.z = dy / maxDist;
 }
 
 function resetJoystick() {
   isDragging = false;
-  knob.style.transform = 'translate(0px, 0px)';
+  knob.style.transform = translate(0px, 0px);
   moveDir.x = 0;
   moveDir.z = 0;
 }
@@ -377,6 +376,7 @@ function animate() {
     camera.position.y = 12;
     camera.lookAt(0, 1, 0);
   } else {
+    // حركة الشخصية بواسطة WASD أو الأنالوج
     let speed = 6 * dt;
     let dx = 0, dz = 0;
 
@@ -388,6 +388,7 @@ function animate() {
     nabai.position.x += dx;
     nabai.position.z += dz;
 
+    // تدوير الشخصية باتجاه الحركة
     if (dx !== 0 || dz !== 0) {
       nabai.rotation.y = Math.atan2(dx, dz);
     }
