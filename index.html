@@ -17,61 +17,102 @@
     align-items:center; justify-content:center; text-align:center;
     background:linear-gradient(135deg,#ffb6d5 0%,#ffd9a0 40%,#b6f0c1 100%);
     transition:opacity 1.2s ease;
-    padding: 10px;
-    overflow-y: auto;
   }
   #welcome.hidden { opacity:0; pointer-events:none; }
-  #welcome h1 { font-size:36px; color:#d63384; text-shadow:2px 2px 0 #fff; margin-bottom:4px; }
-  #welcome h2 { font-size:18px; color:#7a4a12; margin-bottom:10px; }
+  #welcome h1 { font-size:56px; color:#d63384; text-shadow:3px 3px 0 #fff, 6px 6px 12px rgba(0,0,0,.15); margin-bottom:8px; }
+  #welcome h2 { font-size:26px; color:#7a4a12; margin-bottom:24px; }
   #welcome .card {
-    background:rgba(255,255,255,.9); border-radius:20px; padding:15px 20px; max-width:500px; width: 100%;
-    box-shadow:0 8px 25px rgba(0,0,0,.15); border:2px dashed #ff8fb7;
+    background:rgba(255,255,255,.85); border-radius:28px; padding:28px 40px; max-width:640px;
+    box-shadow:0 12px 40px rgba(0,0,0,.18); border:3px dashed #ff8fb7;
   }
-  #welcome p { font-size:14px; color:#5a3b52; line-height:1.6; margin-bottom:10px; }
-  #welcome .keys { font-size:12px; color:#8a6d85; margin-bottom:12px; }
+  #welcome p { font-size:18px; color:#5a3b52; line-height:1.9; margin-bottom:20px; }
+  #welcome .keys { font-size:15px; color:#8a6d85; margin-bottom:22px; }
   #startBtn {
-    font-size:18px; font-weight:bold; color:#fff; background:linear-gradient(180deg,#ff6fa5,#e34a8a);
-    border:none; border-radius:40px; padding:10px 40px; cursor:pointer;
-    box-shadow:0 4px 0 #b03068, 0 6px 15px rgba(0,0,0,.2); font-family:inherit;
+    font-size:24px; font-weight:bold; color:#fff; background:linear-gradient(180deg,#ff6fa5,#e34a8a);
+    border:none; border-radius:50px; padding:16px 60px; cursor:pointer;
+    box-shadow:0 6px 0 #b03068, 0 10px 22px rgba(0,0,0,.2); transition:transform .15s;
+    font-family:inherit;
   }
+  #startBtn:hover { transform:scale(1.06); }
+  #startBtn:active { transform:translateY(4px); box-shadow:0 2px 0 #b03068; }
 
   /* ======= لوحة المهام ======= */
   #tasksPanel {
-    position:fixed; top:10px; right:10px; z-index:20; width:240px;
-    background:rgba(255,255,255,.92); border-radius:15px; padding:10px;
-    border:2px solid #ffc2dd; font-size:12px;
+    position:fixed; top:14px; right:14px; z-index:20; width:280px;
+    background:rgba(255,255,255,.92); border-radius:20px; padding:14px 16px;
+    border:3px solid #ffc2dd; box-shadow:0 8px 24px rgba(0,0,0,.15);
   }
-  #tasksPanel h3 { color:#d63384; font-size:15px; margin-bottom:6px; }
-  .task { display:flex; align-items:center; gap:6px; color:#5a3b52; padding:3px 0; }
+  #tasksPanel h3 { color:#d63384; font-size:18px; margin-bottom:8px; }
+  .task { display:flex; align-items:center; gap:8px; font-size:14px; color:#5a3b52; padding:5px 0; }
   .task.done { color:#2e9e5b; text-decoration:line-through; opacity:.75; }
-  .task .chk { width:16px; height:16px; border-radius:50%; border:2px solid #ff8fb7; display:flex; align-items:center; justify-content:center; font-size:10px; color:#fff; flex-shrink:0; }
+  .task .chk { width:20px; height:20px; border-radius:50%; border:2px solid #ff8fb7; display:flex; align-items:center; justify-content:center; font-size:13px; color:#fff; flex-shrink:0; }
   .task.done .chk { background:#4ecb8d; border-color:#4ecb8d; }
+  .task.active .chk { border-color:#ff6fa5; box-shadow:0 0 8px #ff8fb7; animation:pulse 1.4s infinite; }
+  @keyframes pulse { 50% { transform:scale(1.2);} }
+
+  /* ======= مربع الحوار (تفاحة) ======= */
+  #dialog {
+    position:fixed; bottom:20px; left:50%; transform:translateX(-50%); z-index:20;
+    background:rgba(255,255,255,.95); border-radius:22px; padding:14px 22px; max-width:560px;
+    border:3px solid #ffb35c; box-shadow:0 8px 24px rgba(0,0,0,.18);
+    display:none; align-items:center; gap:14px;
+  }
+  #dialog.show { display:flex; animation:pop .3s ease; }
+  @keyframes pop { from { transform:translateX(-50%) scale(.7); opacity:0;} }
+  #dialogApple { font-size:38px; animation:bob 1.6s infinite ease-in-out; }
+  @keyframes bob { 50% { transform:translateY(-6px) rotate(-6deg);} }
+  #dialogName { color:#e07b00; font-weight:bold; font-size:16px; }
+  #dialogText { color:#5a3b52; font-size:16px; line-height:1.7; }
+
+  /* ======= تلميح التفاعل ======= */
+  #hint {
+    position:fixed; bottom:110px; left:50%; transform:translateX(-50%); z-index:15;
+    background:rgba(60,30,50,.85); color:#fff; padding:8px 20px; border-radius:30px;
+    font-size:16px; display:none; box-shadow:0 4px 14px rgba(0,0,0,.3);
+  }
+  #hint.show { display:block; animation:pop .25s ease; }
 
   /* ======= عدّادات ======= */
   #stats {
-    position:fixed; top:10px; left:10px; z-index:20; display:flex; gap:6px;
+    position:fixed; top:14px; left:14px; z-index:20; display:flex; gap:10px; flex-wrap:wrap; max-width:340px;
   }
-  .stat { background:rgba(255,255,255,.92); border-radius:12px; padding:6px 10px; font-size:13px; font-weight:bold; color:#5a3b52; border:2px solid #ffd3e6; }
+  .stat { background:rgba(255,255,255,.92); border-radius:16px; padding:8px 14px; font-size:15px; font-weight:bold; color:#5a3b52; border:2px solid #ffd3e6; box-shadow:0 4px 12px rgba(0,0,0,.1); }
 
-  /* ======= مربع الحوار ======= */
-  #dialog {
-    position:fixed; bottom:15px; left:50%; transform:translateX(-50%); z-index:20;
-    background:rgba(255,255,255,.95); border-radius:18px; padding:10px 16px; max-width:450px; width: 90%;
-    border:2px solid #ffb35c; display:none; align-items:center; gap:10px; font-size:14px;
+  /* ======= احتفال شطورتي الحلوة ======= */
+  #celebrate {
+    position:fixed; inset:0; z-index:40; display:none; align-items:center; justify-content:center;
+    pointer-events:none;
   }
-  #dialog.show { display:flex; }
-  #dialogApple { font-size:28px; }
-  #dialogName { color:#e07b00; font-weight:bold; }
-  #dialogText { color:#5a3b52; }
+  #celebrate.show { display:flex; }
+  #celebrate .msg {
+    font-size:64px; font-weight:900; color:#fff;
+    text-shadow:0 0 20px #ff6fa5, 3px 3px 0 #d63384, 6px 6px 0 #a1246a;
+    animation:bigPop .8s cubic-bezier(.2,2.2,.4,1);
+  }
+  @keyframes bigPop { from { transform:scale(0) rotate(-15deg); } }
+  .confetti { position:absolute; top:-20px; font-size:28px; animation:fall linear forwards; }
+  @keyframes fall { to { transform:translateY(110vh) rotate(720deg); opacity:.7; } }
 
+  /* ======= شاشة النهاية ======= */
   #ending {
     position:fixed; inset:0; z-index:60; display:none; flex-direction:column;
     align-items:center; justify-content:center; text-align:center;
     background:radial-gradient(circle,#fff0f7 0%,#ffcfe4 100%); padding:20px;
   }
   #ending.show { display:flex; }
-  #ending h1 { font-size:36px; color:#d63384; margin-bottom:10px; }
-  #ending p { font-size:16px; color:#7a4a5e; line-height:1.8; }
+  #ending h1 { font-size:48px; color:#d63384; margin-bottom:16px; text-shadow:2px 2px 0 #fff; }
+  #ending p { font-size:20px; color:#7a4a5e; line-height:2; max-width:620px; }
+  #ending .gifts { font-size:52px; margin:20px 0; letter-spacing:10px; animation:bob 2s infinite; }
+
+  #soundBtn {
+    position:fixed; bottom:16px; right:16px; z-index:30; width:52px; height:52px;
+    border-radius:50%; border:3px solid #ffc2dd; background:#fff; font-size:24px; cursor:pointer;
+    box-shadow:0 4px 12px rgba(0,0,0,.15);
+  }
+  #controls {
+    position:fixed; bottom:16px; left:16px; z-index:15; font-size:13px; color:#6b4a63;
+    background:rgba(255,255,255,.75); padding:8px 14px; border-radius:14px;
+  }
 </style>
 </head>
 <body>
@@ -81,9 +122,12 @@
   <h1>🌸 مزرعة خوخة 🌸</h1>
   <h2>مغامرة الزراعة والهدوء مع نبأي وتفاحة</h2>
   <div class="card">
-    <p>أهلًا بك يا صديقي في أجمل مزرعة في العالم! 💕<br>ازرع، اسقِ، احصد، وابحث عن الكنوز والدمى المخبأة…<br>
+    <p>أهلًا بك يا صديقي في أجمل مزرعة في العالم! 💕<br>
+    ستقضي يومًا هادئًا مليئًا بالورود والفراشات والخبز اليدوي الطازج.<br>
+    انضم إلى <b>نبأي</b> 🌷 واستمع لتعليمات صديقتها <b>تفاحة</b> 🍎<br>
+    ازرع، اسقِ، احصد، وابحث عن الكنوز والدمى المخبأة…<br>
     وفي نهاية الرحلة ينتظرك سر جميل: <b>قلادة القلب المخبأ فيها سيف</b> 💖⚔️</p>
-    <div class="keys">🎮 التحكم: الأسهم أو WASD للحركة &nbsp;|&nbsp; حرف E للتفاعل</div>
+    <div class="keys">🎮 التحكم: الأسهم أو WASD للحركة &nbsp;|&nbsp; حرف E للتفاعل &nbsp;|&nbsp; اسحب بالماوس لتدوير الكاميرا</div>
     <button id="startBtn">ابدأ الرحلة 🌱</button>
   </div>
 </div>
@@ -94,23 +138,33 @@
 </div>
 
 <div id="stats">
-  <div class="stat">🌾 <span id="sHarvest">0</span>/6</div>
+  <div class="stat">🌾 <span id="sHarvest">0</span></div>
   <div class="stat">💎 <span id="sTreasure">0</span>/5</div>
   <div class="stat">🪆 <span id="sDoll">0</span>/3</div>
-  <div class="stat">🥖 <span id="sBread">0</span>/1</div>
+  <div class="stat">🥖 <span id="sBread">0</span></div>
 </div>
 
 <div id="dialog">
   <div id="dialogApple">🍎</div>
-  <div><div id="dialogName">تفاحة</div><div id="dialogText">أهلاً بك يا نبأي! اقتربي من الحقول واضغطي E لزراعة المحصول الأول! 🌱</div></div>
+  <div><div id="dialogName">تفاحة</div><div id="dialogText"></div></div>
 </div>
+<div id="hint"></div>
+
+<div id="celebrate"><div class="msg">🌟 شطورتي الحلوة! 🌟</div></div>
 
 <div id="ending">
   <h1>🌸 مبروك يا بطل المزرعة! 🌸</h1>
-  <p>أكملت كل المهام يا <b>نبأي</b>! 🎉<br>المزرعة أجمل بوجودك… 💕</p>
+  <p>أكملت كل المهام يا <b>نبأي</b>! 🎉<br>
+  زرعتَ، وسقيتَ، وحصدتَ، وجمعت كل الكنوز والدمى، ووجدت قلادة القلب!<br>
+  المزرعة أجمل بوجودك… شاركها مع من تحب 💕</p>
+  <div class="gifts">🌹🦋🍞💖🌻🐄🪆</div>
 </div>
 
+<button id="soundBtn" title="الصوت">🔊</button>
+<div id="controls">⬆⬇⬅➡ / WASD حركة &nbsp;•&nbsp; E تفاعل &nbsp;•&nbsp; اسحب الكاميرا بالماوس</div>
+
 <script>
+// ================== الإعداد الأساسي ==================
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x9fdcff);
 scene.fog = new THREE.Fog(0x9fdcff, 55, 140);
@@ -120,95 +174,430 @@ const renderer = new THREE.WebGLRenderer({ antialias:true });
 renderer.setSize(innerWidth, innerHeight);
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 document.getElementById('game').appendChild(renderer.domElement);
 
+// إضاءة ناعمة
 scene.add(new THREE.HemisphereLight(0xfff3e0, 0x88bb66, 0.9));
 const sun = new THREE.DirectionalLight(0xfff2cc, 1.1);
 sun.position.set(30, 45, 20);
 sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+sun.shadow.camera.left = -60; sun.shadow.camera.right = 60;
+sun.shadow.camera.top = 60; sun.shadow.camera.bottom = -60;
 scene.add(sun);
 
-const ground = new THREE.Mesh(
-  new THREE.CircleGeometry(75, 64),
-  new THREE.MeshStandardMaterial({color:0x8fd97a, roughness:1})
-);
+// أرضية ملوّنة ناعمة
+const groundGeo = new THREE.CircleGeometry(75, 64);
+const gColors = [];
+const gp = groundGeo.attributes.position;
+for (let i=0;i<gp.count;i++){
+  const r = Math.hypot(gp.getX(i), gp.getY(i))/75;
+  const c = new THREE.Color(0x8fd97a).lerp(new THREE.Color(0x6cc05e), r*0.7);
+  const n = (Math.random()-0.5)*0.06;
+  c.offsetHSL(0, 0, n);
+  gColors.push(c.r,c.g,c.b);
+}
+groundGeo.setAttribute('color', new THREE.Float32BufferAttribute(gColors,3));
+const ground = new THREE.Mesh(groundGeo, new THREE.MeshStandardMaterial({vertexColors:true, roughness:1}));
 ground.rotation.x = -Math.PI/2;
 ground.receiveShadow = true;
 scene.add(ground);
 
-// شخصية نبأي
+// سحب لطيفة
+function makeCloud(x,y,z,s){
+  const g = new THREE.Group();
+  const m = new THREE.MeshLambertMaterial({color:0xffffff, transparent:true, opacity:0.95});
+  [[0,0,0,1.6],[1.4,0.2,0,1.1],[-1.4,0.15,0.1,1.2],[0.5,0.6,0,1],[ -0.6,0.5,0.1,0.9]].forEach(p=>{
+    const b = new THREE.Mesh(new THREE.SphereGeometry(p[3]*s, 14, 12), m);
+    b.position.set(p[0]*s, p[1]*s, p[2]*s); g.add(b);
+  });
+  g.position.set(x,y,z); scene.add(g); clouds.push(g);
+}
+const clouds = [];
+makeCloud(-30,26,-25,2); makeCloud(20,30,-35,2.6); makeCloud(35,24,15,1.8);
+makeCloud(-25,28,20,2.2); makeCloud(0,32,-50,3);
+
+// ================== شخصية نبأي ==================
 const nabai = new THREE.Group();
-const body = new THREE.Mesh(new THREE.ConeGeometry(0.55, 1.1, 24), new THREE.MeshStandardMaterial({color:0xff8fb7}));
+const skinMat = new THREE.MeshStandardMaterial({color:0xffdfc4, roughness:0.8});
+const dressMat = new THREE.MeshStandardMaterial({color:0xff8fb7, roughness:0.7});
+const hairMat = new THREE.MeshStandardMaterial({color:0x5b3a2e, roughness:0.9});
+
+const body = new THREE.Mesh(new THREE.ConeGeometry(0.55, 1.1, 24), dressMat); // فستان وردي
 body.position.y = 0.95; nabai.add(body);
-const head = new THREE.Mesh(new THREE.SphereGeometry(0.42, 24, 20), new THREE.MeshStandardMaterial({color:0xffdfc4}));
+const head = new THREE.Mesh(new THREE.SphereGeometry(0.42, 24, 20), skinMat);
 head.position.y = 1.85; nabai.add(head);
+const hair = new THREE.Mesh(new THREE.SphereGeometry(0.47, 24, 20), hairMat);
+hair.position.set(0, 1.95, -0.06); hair.scale.set(1,0.95,1); nabai.add(hair);
+const bun = new THREE.Mesh(new THREE.SphereGeometry(0.2, 14, 12), hairMat);
+bun.position.set(0, 2.35, -0.1); nabai.add(bun);
+// عيون كيوت
+const eyeMat = new THREE.MeshBasicMaterial({color:0x2b1b16});
+[[-0.16],[0.16]].forEach(e=>{
+  const eye = new THREE.Mesh(new THREE.SphereGeometry(0.055, 10, 10), eyeMat);
+  eye.position.set(e[0], 1.9, 0.38); nabai.add(eye);
+});
+// خدود وردية
+const blushMat = new THREE.MeshBasicMaterial({color:0xff9db1, transparent:true, opacity:0.7});
+[[-0.26],[0.26]].forEach(b=>{
+  const bl = new THREE.Mesh(new THREE.CircleGeometry(0.07, 10), blushMat);
+  bl.position.set(b[0], 1.78, 0.385); bl.lookAt(b[0]*3, 1.78, 2); nabai.add(bl);
+});
+// وردة في الشعر
+const hairFlower = new THREE.Group();
+const fc = new THREE.Mesh(new THREE.SphereGeometry(0.09,8,8), new THREE.MeshStandardMaterial({color:0xff5c8a}));
+hairFlower.add(fc);
+for(let i=0;i<5;i++){
+  const p = new THREE.Mesh(new THREE.SphereGeometry(0.075,8,8), new THREE.MeshStandardMaterial({color:0xff8fb7}));
+  p.position.set(Math.cos(i/5*Math.PI*2)*0.11, 0, Math.sin(i/5*Math.PI*2)*0.11);
+  hairFlower.add(p);
+}
+hairFlower.position.set(0.32, 2.2, 0.28); nabai.add(hairFlower);
+// أذرع وأرجل
+const armMat = skinMat;
+[[-0.5,0.25],[0.5,-0.25]].forEach(a=>{
+  const arm = new THREE.Mesh(new THREE.CylinderGeometry(0.08,0.08,0.5,8), armMat);
+  arm.position.set(a[0], 1.25, 0); arm.rotation.z = a[1]; nabai.add(arm);
+});
+[[-0.18],[0.18]].forEach(l=>{
+  const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.09,0.09,0.45,8), skinMat);
+  leg.position.set(l[0], 0.28, 0); nabai.add(leg);
+  const shoe = new THREE.Mesh(new THREE.SphereGeometry(0.12,10,8), new THREE.MeshStandardMaterial({color:0xe34a8a}));
+  shoe.position.set(l[0], 0.08, 0.05); shoe.scale.set(1,0.6,1.3); nabai.add(shoe);
+});
+nabai.traverse(o=>{ if(o.isMesh){ o.castShadow = true; }});
 nabai.position.set(0, 0, 12);
 scene.add(nabai);
 
-// الحقول والكنوز
+// ================== تفاحة (المرشدة) ==================
+const tuffaha = new THREE.Group();
+const appleMat = new THREE.MeshStandardMaterial({color:0xe83e3e, roughness:0.4});
+const appleBody = new THREE.Mesh(new THREE.SphereGeometry(0.5, 20, 18), appleMat);
+appleBody.scale.set(1, 0.92, 1); tuffaha.add(appleBody);
+const leaf = new THREE.Mesh(new THREE.SphereGeometry(0.16, 8, 6), new THREE.MeshStandardMaterial({color:0x4caf50}));
+leaf.position.set(0.16, 0.52, 0); leaf.scale.set(1.6, 0.5, 0.8); leaf.rotation.z = -0.5; tuffaha.add(leaf);
+const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.03,0.04,0.22,6), new THREE.MeshStandardMaterial({color:0x7a4a12}));
+stem.position.y = 0.58; tuffaha.add(stem);
+[[-0.18],[0.18]].forEach(e=>{
+  const eye = new THREE.Mesh(new THREE.SphereGeometry(0.06, 8, 8), new THREE.MeshBasicMaterial({color:0x2b1b16}));
+  eye.position.set(e[0], 0.1, 0.44); tuffaha.add(eye);
+});
+const smile = new THREE.Mesh(new THREE.TorusGeometry(0.12, 0.025, 8, 12, Math.PI), new THREE.MeshBasicMaterial({color:0x7a2020}));
+smile.position.set(0, -0.08, 0.45); smile.rotation.x = Math.PI; tuffaha.add(smile);
+[[-0.3],[0.3]].forEach(c=>{
+  const ch = new THREE.Mesh(new THREE.CircleGeometry(0.07, 10), new THREE.MeshBasicMaterial({color:0xff9db1, transparent:true, opacity:0.8}));
+  ch.position.set(c[0], -0.05, 0.42); ch.lookAt(c[0]*4, -0.05, 3); tuffaha.add(ch);
+});
+const halo = new THREE.Mesh(new THREE.TorusGeometry(0.32, 0.03, 8, 24), new THREE.MeshBasicMaterial({color:0xffe066}));
+halo.rotation.x = Math.PI/2; halo.position.y = 0.9; tuffaha.add(halo);
+tuffaha.traverse(o=>{ if(o.isMesh) o.castShadow = true; });
+tuffaha.position.set(1.6, 2.4, 10);
+scene.add(tuffaha);
+</script>
+
+<script>
+// ================== أدوات مساعدة ==================
+function rand(a,b){ return a + Math.random()*(b-a); }
+const PETALS = [0xff5c8a, 0xffb3d9, 0xffe066, 0xff8c42, 0xc084fc, 0xff6b6b, 0x74c0fc, 0xff9db1];
+
+// ================== الورد والنباتات ==================
+const flowers = [];
+function makeFlower(x, z){
+  const g = new THREE.Group();
+  const h = rand(0.35, 0.6);
+  const stemM = new THREE.Mesh(new THREE.CylinderGeometry(0.02,0.025,h,6),
+    new THREE.MeshStandardMaterial({color:0x3e9e4f}));
+  stemM.position.y = h/2; g.add(stemM);
+  const leafM = new THREE.Mesh(new THREE.SphereGeometry(0.07,6,6),
+    new THREE.MeshStandardMaterial({color:0x4caf50}));
+  leafM.scale.set(1.6,0.4,0.8); leafM.position.set(0.07, h*0.45, 0); g.add(leafM);
+  const col = PETALS[Math.floor(Math.random()*PETALS.length)];
+  const headG = new THREE.Group();
+  const cen = new THREE.Mesh(new THREE.SphereGeometry(0.06,8,8),
+    new THREE.MeshStandardMaterial({color:0xffe066}));
+  headG.add(cen);
+  for(let i=0;i<6;i++){
+    const p = new THREE.Mesh(new THREE.SphereGeometry(0.07,8,6),
+      new THREE.MeshStandardMaterial({color:col}));
+    p.position.set(Math.cos(i/6*Math.PI*2)*0.1, 0, Math.sin(i/6*Math.PI*2)*0.1);
+    p.scale.set(1,0.5,1); headG.add(p);
+  }
+  headG.position.y = h; g.add(headG);
+  g.position.set(x, 0, z);
+  g.userData = { type:'flower', picked:false, baseY:0 };
+  g.traverse(o=>{ if(o.isMesh) o.castShadow = true; });
+  scene.add(g); flowers.push(g);
+  return g;
+}
+// عشب صغير
+for(let i=0;i<120;i++){
+  const a = Math.random()*Math.PI*2, r = rand(8, 68);
+  const blade = new THREE.Mesh(new THREE.ConeGeometry(0.05, rand(0.15,0.35), 5),
+    new THREE.MeshStandardMaterial({color:0x5cb85c}));
+  blade.position.set(Math.cos(a)*r, 0.1, Math.sin(a)*r);
+  scene.add(blade);
+}
+// توزيع الورد
+const flowerSpots = [];
+for(let i=0;i<46;i++){
+  const a = Math.random()*Math.PI*2, r = rand(10, 60);
+  const x = Math.cos(a)*r, z = Math.sin(a)*r;
+  if (Math.abs(x) < 11 && z > -4 && z < 24) continue; // لا داخل الحقل
+  flowerSpots.push(makeFlower(x, z));
+}
+
+// ================== الأشجار ==================
+function makeTree(x, z, s=1, blossom=false){
+  const g = new THREE.Group();
+  const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.28*s, 0.42*s, 2.4*s, 10),
+    new THREE.MeshStandardMaterial({color:0x8a5a2b, roughness:1}));
+  trunk.position.y = 1.2*s; trunk.castShadow = true; g.add(trunk);
+  const cols = blossom ? [0xffb3d9, 0xffc2dd, 0xff8fb7] : [0x4e9e3e, 0x5cb85c, 0x66bb6a];
+  [[0,3.2,0,1.5],[1,2.6,0.4,1.1],[-0.9,2.7,-0.3,1.15],[0.2,2.5,-0.8,1.0]].forEach((p,i)=>{
+    const c = new THREE.Mesh(new THREE.SphereGeometry(p[3]*s, 14, 12),
+      new THREE.MeshStandardMaterial({color:cols[i%3], roughness:1}));
+    c.position.set(p[0]*s, p[1]*s, p[2]*s); c.castShadow = true; g.add(c);
+  });
+  if (blossom){ // أزهار على الشجرة المزهرة
+    for(let i=0;i<10;i++){
+      const b = new THREE.Mesh(new THREE.SphereGeometry(0.09*s,6,6),
+        new THREE.MeshBasicMaterial({color:0xffe4f0}));
+      b.position.set(rand(-1,1)*1.3*s, rand(2.2,4)*s, rand(-1,1)*1.3*s);
+      g.add(b);
+    }
+  }
+  g.position.set(x, 0, z);
+  scene.add(g); return g;
+}
+makeTree(-18, -6, 1.3, true);   // شجرة تفاحة المزهرة
+makeTree(-24, 6, 1.1);
+makeTree(20, -10, 1.2);
+makeTree(26, 4, 1.4);
+makeTree(-12, -22, 1.2, true);
+makeTree(14, -24, 1.0);
+makeTree(-30, -14, 1.5);
+makeTree(34, -8, 1.1, true);
+makeTree(8, -34, 1.3);
+makeTree(-8, 30, 1.0, true);
+makeTree(28, 22, 1.2);
+makeTree(-28, 24, 1.1);
+makeTree(40, 12, 1.0);
+makeTree(-40, -2, 1.3);
+
+// ================== السياج ==================
+const fenceMat = new THREE.MeshStandardMaterial({color:0xd9a066, roughness:1});
+function fenceLine(x1,z1,x2,z2){
+  const dx = x2-x1, dz = z2-z1, len = Math.hypot(dx,dz);
+  const g = new THREE.Group();
+  const n = Math.floor(len/2.4);
+  for(let i=0;i<=n;i++){
+    const p = new THREE.Mesh(new THREE.BoxGeometry(0.16,1.1,0.16), fenceMat);
+    p.position.set(x1 + dx*i/n, 0.55, z1 + dz*i/n); p.castShadow = true; g.add(p);
+  }
+  [0.55, 0.95].forEach(y=>{
+    const rail = new THREE.Mesh(new THREE.BoxGeometry(len, 0.1, 0.08), fenceMat);
+    rail.position.set((x1+x2)/2, y, (z1+z2)/2);
+    rail.rotation.y = -Math.atan2(dz, dx);
+    g.add(rail);
+  });
+  scene.add(g);
+}
+fenceLine(-10,-2, 10,-2);  fenceLine(10,-2, 10,22);
+fenceLine(10,22, -10,22);  fenceLine(-10,22, -10,-2);
+
+// ================== أرض الزراعة (الحقل) ==================
 const plots = [];
-for(let i=0; i<6; i++){
+const soilMat = new THREE.MeshStandardMaterial({color:0x7a5230, roughness:1});
+const wetMat  = new THREE.MeshStandardMaterial({color:0x4e3420, roughness:1});
+for(let i=0;i<6;i++){
   const col = i % 3, row = Math.floor(i/3);
   const x = -6 + col*6, z = 4 + row*8;
-  const soil = new THREE.Mesh(new THREE.BoxGeometry(4.6, 0.5, 6), new THREE.MeshStandardMaterial({color:0x7a5230}));
-  soil.position.set(x, 0.25, z);
+  const soil = new THREE.Mesh(new THREE.BoxGeometry(4.6, 0.5, 6), soilMat);
+  soil.position.set(x, 0.25, z); soil.receiveShadow = true; soil.castShadow = true;
   scene.add(soil);
-  plots.push({ x, z, soil, state:'empty', plant:null });
+  plots.push({ x, z, soil, state:'empty', plant:null, waterT:0, mesh:soil });
 }
 
-let gameStarted = false;
-let statsData = { harvest: 0, treasure: 0, doll: 0, bread: 0 };
-let currentTaskIdx = 0;
-
-const tasks = [
-  { text: "ازرع واسقِ واحصُد 6 محاصيل", check: () => statsData.harvest >= 6 },
-  { text: "ابحث عن الكنوز (5/5)", check: () => statsData.treasure >= 5 },
-  { text: "ابحث عن الدمى (3/3)", check: () => statsData.doll >= 3 },
-  { text: "اصنع الخبز الطازج", check: () => statsData.bread >= 1 }
-];
-
-function updateTasksUI(){
-  const list = document.getElementById('tasksList');
-  list.innerHTML = '';
-  tasks.forEach((t, i) => {
-    const done = t.check();
-    const active = i === currentTaskIdx && !done;
-    if (active && currentTaskIdx < tasks.length && done) currentTaskIdx++;
-    list.innerHTML += <div class="task ${done?'done':''}"><div class="chk">${done?'✓':''}</div><span>${t.text}</span></div>;
-  });
-  document.getElementById('sHarvest').innerText = statsData.harvest;
-  document.getElementById('sTreasure').innerText = statsData.treasure;
-  document.getElementById('sDoll').innerText = statsData.doll;
-  document.getElementById('sBread').innerText = statsData.bread;
-  if (currentTaskIdx >= tasks.length) document.getElementById('ending').classList.add('show');
-}
-
-document.getElementById('startBtn').addEventListener('click', () => {
-  document.getElementById('welcome').classList.add('hidden');
-  gameStarted = true;
-  updateTasksUI();
-});let camAngle = 0;
-let clock = new THREE.Clock();
-function animate() {
-  requestAnimationFrame(animate);
-  const dt = clock.getDelta();
-
-  if (!gameStarted) {
-    camAngle += dt * 0.3;
-    camera.position.x = Math.sin(camAngle) * 22;
-    camera.position.z = Math.cos(camAngle) * 22;
-    camera.position.y = 12;
-    camera.lookAt(0, 1, 0);
-  } else {
-    camera.position.x = nabai.position.x + Math.sin(camAngle) * 12;
-    camera.position.z = nabai.position.z + Math.cos(camAngle) * 12;
-    camera.position.y = 8;
-    camera.lookAt(nabai.position.x, nabai.position.y + 1.2, nabai.position.z);
-  }
-
-  renderer.render(scene, camera);
-}
-animate();
+// ================== المخبز ==================
+function makeBakery(){
+  const g = new THREE.Group();
+  const wall = new THREE.Mesh(new THREE.BoxGeometry(7, 4, 5.5),
+    new THREE.MeshStandardMaterial({color:0xffe8d1, roughness:0.9}));
+  wall.position.y = 2; wall.castShadow = true; wall.receiveShadow = true; g.add(wall);
+  const roof = new THREE.Mesh(new THREE.ConeGeometry(5.6, 2.4, 4),
+    new THREE.MeshStandardMaterial({color:0xe8638a, roughness:0.8}));
+  roof.position.y = 5.2; roof.rotation.y = Math.PI/4; roof.castShadow = true; g.add(roof);
+  const door = new THREE.Mesh(new THREE.BoxGeometry(1.4, 2.2, 0.15),
+    new THREE.MeshStandardMaterial({color:0x9c6644}));
+  door.position.set(0, 1.1, 2.82); g.add(door);
+  // نافذتان
+  [[-2.1],[2.1]].forEach(w=>{
+    const win = new THREE.Mesh(new THREE.BoxGeometry(1.3, 1.3, 0.15),
+      new THREE.MeshStandardMaterial({color:0x9ad6ff, emissive:0x3a7ca5, emissiveIntensity:0.
+                                      addEventListener('resize', ()=>{
+  camera.aspect = innerWidth/innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
 </script>
 </body>
 </html>
+<!-- بداية كود أزرار التحكم اللطيفة للهاتف -->
+<style>
+  /* منع تحديد النص أو سحب الشاشة أثناء اللعب */
+  body {
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  /* حاوية أزرار اللمس */
+  #cute-mobile-controls {
+    position: fixed;
+    bottom: 25px;
+    left: 0;
+    width: 100%;
+    padding: 0 30px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* قاعدة عصا التحكم (وجه الأرنب) */
+  #bunny-joy-base {
+    position: relative;
+    width: 110px;
+    height: 110px;
+    background: rgba(255, 255, 255, 0.85);
+    border: 3px solid #ffb7c5;
+    border-radius: 50%;
+    pointer-events: auto;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* أذنا الأرنب لعصا التحكم */
+  #bunny-joy-base::before,
+  #bunny-joy-base::after {
+    content: '';
+    position: absolute;
+    top: -32px;
+    width: 24px;
+    height: 42px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 3px solid #ffb7c5;
+    border-bottom: none;
+    border-radius: 50% 50% 0 0;
+    z-index: -1;
+  }
+  #bunny-joy-base::before { left: 22px; transform: rotate(-10deg); }
+  #bunny-joy-base::after { right: 22px; transform: rotate(10deg); }
+
+  /* مقبض عصا التحكم (أنف الأرنب الوردي) */
+  #bunny-joy-stick {
+    width: 44px;
+    height: 44px;
+    background: #ff8da1;
+    border: 3px solid #fff;
+    border-radius: 50%;
+    position: absolute;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.05s ease-out;
+  }
+
+  /* زر التفاعل (مخلب الأرنب) */
+  #bunny-action-btn {
+    position: relative;
+    width: 85px;
+    height: 85px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 3px solid #ffb7c5;
+    border-radius: 50%;
+    pointer-events: auto;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 38px;
+    cursor: pointer;
+    transition: transform 0.1s;
+  }
+
+  #bunny-action-btn:active {
+    transform: scale(0.9);
+    background: #ffe6eb;
+  }
+</style>
+
+<div id="cute-mobile-controls">
+  <!-- عصا الحركة اليسرى -->
+  <div id="bunny-joy-base">
+    <div id="bunny-joy-stick"></div>
+  </div>
+
+  <!-- زر التفاعل الأيمن -->
+  <button id="bunny-action-btn" aria-label="تفاعل">🐾</button>
+</div>
+
+<script>
+(function() {
+  // دالة لمحاكاة ضغط أزرار الكيبورد الموجودة في اللعبة
+  function triggerKey(key, code, type) {
+    const event = new KeyboardEvent(type, {
+      key: key,
+      code: code,
+      keyCode: key.toUpperCase().charCodeAt(0),
+      which: key.toUpperCase().charCodeAt(0),
+      bubbles: true
+    });
+    window.dispatchEvent(event);
+    document.dispatchEvent(event);
+  }
+
+  // التحكم بعصا الأرنب (WASD)
+  const base = document.getElementById('bunny-joy-base');
+  const stick = document.getElementById('bunny-joy-stick');
+  let activeTouchId = null;
+  const maxDist = 35;
+  const keysState = { w: false, a: false, s: false, d: false };
+
+  function updateKeys(dx, dy) {
+    const threshold = 12;
+    const newState = {
+      w: dy < -threshold,
+      s: dy > threshold,
+      a: dx < -threshold,
+      d: dx > threshold
+    };
+
+    const keyCodes = { w: 'KeyW', a: 'KeyA', s: 'KeyS', d: 'KeyD' };
+    for (let k in newState) {
+      if (newState[k] !== keysState[k]) {
+        keysState[k] = newState[k];
+        triggerKey(k, keyCodes[k], newState[k] ? 'keydown' : 'keyup');
+      }
+    }
+  }
+
+  function handleMove(clientX, clientY) {
+    const rect = base.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    let dx = clientX - centerX;
+    let dy = clientY - centerY;
+    const dist = Math.hypot(dx, dy);
+
+    if (dist > maxDist) {
+      dx = (dx / dist) * maxDist;
+      dy = (dy / dist) * maxDist;
+    }
+
+    stick.style.transform = translate(${dx}px, ${dy}px);
+    updateKeys(dx, dy);
+  }
